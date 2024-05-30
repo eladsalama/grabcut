@@ -3,8 +3,6 @@ import cv2
 import argparse
 from sklearn.cluster import KMeans
 from igraph import Graph
-# import time
-# import os
 
 GC_BGD = 0 # Hard bg pixel
 GC_FGD = 1 # Hard fg pixel, will not be used
@@ -18,7 +16,6 @@ gamma = 50
 # Define the GrabCut algorithm function
 def grabcut(img, rect, n_iter=5):
     # Assign initial labels to the pixels based on the bounding box
-    # start_time = time.time()
     img = np.asarray(img, dtype=np.float64)
 
     mask = np.zeros(img.shape[:2], dtype=np.uint8)
@@ -36,30 +33,23 @@ def grabcut(img, rect, n_iter=5):
     prev_energy = 0
     num_iters = 1000
     for i in range(num_iters):
-        # print(f"iteration: {i}")
 
         # Update GMM
         bgGMM, fgGMM = update_GMMs(img, mask, bgGMM, fgGMM)
 
         mincut_sets, energy = calculate_mincut(img, mask, bgGMM, fgGMM)
-        # print(f"energy: {energy}")
 
         mask = update_mask(mincut_sets, mask)
 
         relative_energy_change = abs(energy - prev_energy) / energy
-        # print(f"energy change: {relative_energy_change}")
+
         if check_convergence(relative_energy_change):
-            # print(f"converged at iteration: {i}")
             break
 
         prev_energy = energy
-        # print()
 
     mask[mask == GC_PR_BGD] = GC_BGD
     mask[mask == GC_PR_FGD] = GC_FGD
-
-    # exec_time = time.time() - start_time
-    # print(f"execute time: {exec_time}")
 
     # Return the final mask and the GMMs
     return mask, bgGMM, fgGMM
@@ -69,7 +59,6 @@ def initalize_GMMs(img, mask):
     bg = img[np.logical_or(mask == GC_BGD, mask == GC_PR_BGD)]
     fg = img[np.logical_or(mask == GC_FGD, mask == GC_PR_FGD)]
 
-    # print(f"bg size: {bg.size / 3}, fg size: {fg.size / 3}")
     kmeans_bg = KMeans(n_clusters=n_components, random_state=0, n_init="auto").fit(bg)
     kmeans_fg = KMeans(n_clusters=n_components, random_state=0, n_init="auto").fit(fg)
 
@@ -100,7 +89,6 @@ def update_GMMs(img, mask, bgGMM, fgGMM):
     bg = img[np.logical_or(mask == GC_BGD, mask == GC_PR_BGD)]
     fg = img[np.logical_or(mask == GC_FGD, mask == GC_PR_FGD)]
 
-    # print(f"bg size: {bg.size / 3}, fg size: {fg.size / 3}")
     bg_component_index = calc_component_index(bg, bgGMM)
     fg_component_index = calc_component_index(fg, fgGMM)
 
@@ -392,13 +380,6 @@ if __name__ == '__main__':
         gt_mask = cv2.threshold(gt_mask, 0, 1, cv2.THRESH_BINARY)[1]
         acc, jac = cal_metric(mask, gt_mask)
         print(f'Accuracy={acc}, Jaccard={jac}')
-
-    # dir_masks = r""
-    # dir_img_cuts = r""
-    # os.chdir(dir_masks)
-    # cv2.imwrite(f"{args.input_name}_{n_components}.bmp", 255 * mask)
-    # os.chdir(dir_img_cuts)
-    # cv2.imwrite(f"{args.input_name}_{n_components}.jpg", img * (mask[:, :, np.newaxis]))
 
     # Apply the final mask to the input image and display the results
     img_cut = img * (mask[:, :, np.newaxis])
