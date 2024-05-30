@@ -4,5 +4,6 @@ The algorithm then refines this selection by modeling the foreground and backgro
 GrabCut is widely used in applications requiring precise object extraction from images.
 
 ![image](https://github.com/eladsalama/grabcut/assets/100277534/997227f4-a6a5-4623-b278-08962dbe1665)
-![image](https://github.com/eladsalama/grabcut/assets/100277534/c73513c1-33a3-40ec-a0fa-5ab9742b64fb)
+![image](https://github.com/eladsalama/grabcut/assets/100277534/ebcdc1bb-4963-46a5-9395-641386c01f70)
+
 
