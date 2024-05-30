@@ -3,7 +3,7 @@ It is an interactive tool based on iterative graph cuts, where the user provides
 The algorithm then refines this selection by modeling the foreground and background as Gaussian Mixture Models (GMMs) and iteratively optimizing the segmentation using min-cut/max-flow algorithms on a graph representation of the image.
 GrabCut is widely used in applications requiring precise object extraction from images.
 
-I worked on this assignment from scratch based on varius articles i found online as part of the course Fundamentals of Graphics, Image Processing, and Visualization. 
+I worked on this assignment from scratch based on varius articles i found online as part of the course Fundamentals of Graphics, Image Processing, and Visualization durring my second year of studying in Tel-Aviv University. 
 This project combines knowledge from Algorithms and Computer Vision and is written in python.
 
 results on chosen examples:
